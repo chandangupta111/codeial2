@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 
 // let's keep it same as before
 module.exports.profile = function(req, res){
@@ -35,7 +37,14 @@ module.exports.update = async function(req, res){
                  console.log(req.body);
 
             if(req.file){
-                user.avatar =User.avatarPath +req.file.filename
+                if(user.avatar){
+                    fs.unlinkSync(path.join(__dirname,'..',user.avatar));
+
+                }
+
+
+
+                user.avatar =User.avatarPath +'/'+req.file.filename
             }
             user.save();
             return res.redirect('back')
